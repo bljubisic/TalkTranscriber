@@ -1,0 +1,620 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		50C384572C10541B00C51322 /* TalkTranscriberApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C384562C10541B00C51322 /* TalkTranscriberApp.swift */; };
+		50C384592C10541B00C51322 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C384582C10541B00C51322 /* ContentView.swift */; };
+		50C3845B2C10542300C51322 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 50C3845A2C10542300C51322 /* Assets.xcassets */; };
+		50C3845E2C10542300C51322 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 50C3845D2C10542300C51322 /* Preview Assets.xcassets */; };
+		50C384682C10542400C51322 /* TalkTranscriberTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C384672C10542400C51322 /* TalkTranscriberTests.swift */; };
+		50C384722C10542400C51322 /* TalkTranscriberUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C384712C10542400C51322 /* TalkTranscriberUITests.swift */; };
+		50C384742C10542400C51322 /* TalkTranscriberUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C384732C10542400C51322 /* TalkTranscriberUITestsLaunchTests.swift */; };
+		50C384822C1054CE00C51322 /* WhisperKit in Frameworks */ = {isa = PBXBuildFile; productRef = 50C384812C1054CE00C51322 /* WhisperKit */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		50C384642C10542400C51322 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 50C3844B2C10541B00C51322 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 50C384522C10541B00C51322;
+			remoteInfo = TalkTranscriber;
+		};
+		50C3846E2C10542400C51322 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 50C3844B2C10541B00C51322 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 50C384522C10541B00C51322;
+			remoteInfo = TalkTranscriber;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		50C384532C10541B00C51322 /* TalkTranscriber.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TalkTranscriber.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		50C384562C10541B00C51322 /* TalkTranscriberApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkTranscriberApp.swift; sourceTree = "<group>"; };
+		50C384582C10541B00C51322 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		50C3845A2C10542300C51322 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		50C3845D2C10542300C51322 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		50C384632C10542400C51322 /* TalkTranscriberTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalkTranscriberTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		50C384672C10542400C51322 /* TalkTranscriberTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkTranscriberTests.swift; sourceTree = "<group>"; };
+		50C3846D2C10542400C51322 /* TalkTranscriberUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalkTranscriberUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		50C384712C10542400C51322 /* TalkTranscriberUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkTranscriberUITests.swift; sourceTree = "<group>"; };
+		50C384732C10542400C51322 /* TalkTranscriberUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkTranscriberUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		50C384502C10541B00C51322 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				50C384822C1054CE00C51322 /* WhisperKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		50C384602C10542400C51322 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		50C3846A2C10542400C51322 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		50C3844A2C10541B00C51322 = {
+			isa = PBXGroup;
+			children = (
+				50C384552C10541B00C51322 /* TalkTranscriber */,
+				50C384662C10542400C51322 /* TalkTranscriberTests */,
+				50C384702C10542400C51322 /* TalkTranscriberUITests */,
+				50C384542C10541B00C51322 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		50C384542C10541B00C51322 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				50C384532C10541B00C51322 /* TalkTranscriber.app */,
+				50C384632C10542400C51322 /* TalkTranscriberTests.xctest */,
+				50C3846D2C10542400C51322 /* TalkTranscriberUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		50C384552C10541B00C51322 /* TalkTranscriber */ = {
+			isa = PBXGroup;
+			children = (
+				50C384562C10541B00C51322 /* TalkTranscriberApp.swift */,
+				50C384582C10541B00C51322 /* ContentView.swift */,
+				50C3845A2C10542300C51322 /* Assets.xcassets */,
+				50C3845C2C10542300C51322 /* Preview Content */,
+			);
+			path = TalkTranscriber;
+			sourceTree = "<group>";
+		};
+		50C3845C2C10542300C51322 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				50C3845D2C10542300C51322 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		50C384662C10542400C51322 /* TalkTranscriberTests */ = {
+			isa = PBXGroup;
+			children = (
+				50C384672C10542400C51322 /* TalkTranscriberTests.swift */,
+			);
+			path = TalkTranscriberTests;
+			sourceTree = "<group>";
+		};
+		50C384702C10542400C51322 /* TalkTranscriberUITests */ = {
+			isa = PBXGroup;
+			children = (
+				50C384712C10542400C51322 /* TalkTranscriberUITests.swift */,
+				50C384732C10542400C51322 /* TalkTranscriberUITestsLaunchTests.swift */,
+			);
+			path = TalkTranscriberUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		50C384522C10541B00C51322 /* TalkTranscriber */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 50C384772C10542400C51322 /* Build configuration list for PBXNativeTarget "TalkTranscriber" */;
+			buildPhases = (
+				50C3844F2C10541B00C51322 /* Sources */,
+				50C384502C10541B00C51322 /* Frameworks */,
+				50C384512C10541B00C51322 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TalkTranscriber;
+			packageProductDependencies = (
+				50C384812C1054CE00C51322 /* WhisperKit */,
+			);
+			productName = TalkTranscriber;
+			productReference = 50C384532C10541B00C51322 /* TalkTranscriber.app */;
+			productType = "com.apple.product-type.application";
+		};
+		50C384622C10542400C51322 /* TalkTranscriberTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 50C3847A2C10542400C51322 /* Build configuration list for PBXNativeTarget "TalkTranscriberTests" */;
+			buildPhases = (
+				50C3845F2C10542400C51322 /* Sources */,
+				50C384602C10542400C51322 /* Frameworks */,
+				50C384612C10542400C51322 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				50C384652C10542400C51322 /* PBXTargetDependency */,
+			);
+			name = TalkTranscriberTests;
+			productName = TalkTranscriberTests;
+			productReference = 50C384632C10542400C51322 /* TalkTranscriberTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		50C3846C2C10542400C51322 /* TalkTranscriberUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 50C3847D2C10542400C51322 /* Build configuration list for PBXNativeTarget "TalkTranscriberUITests" */;
+			buildPhases = (
+				50C384692C10542400C51322 /* Sources */,
+				50C3846A2C10542400C51322 /* Frameworks */,
+				50C3846B2C10542400C51322 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				50C3846F2C10542400C51322 /* PBXTargetDependency */,
+			);
+			name = TalkTranscriberUITests;
+			productName = TalkTranscriberUITests;
+			productReference = 50C3846D2C10542400C51322 /* TalkTranscriberUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		50C3844B2C10541B00C51322 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1540;
+				LastUpgradeCheck = 1540;
+				TargetAttributes = {
+					50C384522C10541B00C51322 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+					50C384622C10542400C51322 = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = 50C384522C10541B00C51322;
+					};
+					50C3846C2C10542400C51322 = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = 50C384522C10541B00C51322;
+					};
+				};
+			};
+			buildConfigurationList = 50C3844E2C10541B00C51322 /* Build configuration list for PBXProject "TalkTranscriber" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 50C3844A2C10541B00C51322;
+			packageReferences = (
+				50C384802C1054CE00C51322 /* XCRemoteSwiftPackageReference "WhisperKit" */,
+			);
+			productRefGroup = 50C384542C10541B00C51322 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				50C384522C10541B00C51322 /* TalkTranscriber */,
+				50C384622C10542400C51322 /* TalkTranscriberTests */,
+				50C3846C2C10542400C51322 /* TalkTranscriberUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		50C384512C10541B00C51322 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				50C3845E2C10542300C51322 /* Preview Assets.xcassets in Resources */,
+				50C3845B2C10542300C51322 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		50C384612C10542400C51322 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		50C3846B2C10542400C51322 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		50C3844F2C10541B00C51322 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				50C384592C10541B00C51322 /* ContentView.swift in Sources */,
+				50C384572C10541B00C51322 /* TalkTranscriberApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		50C3845F2C10542400C51322 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				50C384682C10542400C51322 /* TalkTranscriberTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		50C384692C10542400C51322 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				50C384742C10542400C51322 /* TalkTranscriberUITestsLaunchTests.swift in Sources */,
+				50C384722C10542400C51322 /* TalkTranscriberUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		50C384652C10542400C51322 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 50C384522C10541B00C51322 /* TalkTranscriber */;
+			targetProxy = 50C384642C10542400C51322 /* PBXContainerItemProxy */;
+		};
+		50C3846F2C10542400C51322 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 50C384522C10541B00C51322 /* TalkTranscriber */;
+			targetProxy = 50C3846E2C10542400C51322 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		50C384752C10542400C51322 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		50C384762C10542400C51322 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		50C384782C10542400C51322 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"TalkTranscriber/Preview Content\"";
+				DEVELOPMENT_TEAM = DA4JAVR3MD;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bix-digital.TalkTranscriber";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		50C384792C10542400C51322 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"TalkTranscriber/Preview Content\"";
+				DEVELOPMENT_TEAM = DA4JAVR3MD;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bix-digital.TalkTranscriber";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		50C3847B2C10542400C51322 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DA4JAVR3MD;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bix-digital.TalkTranscriberTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TalkTranscriber.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TalkTranscriber";
+			};
+			name = Debug;
+		};
+		50C3847C2C10542400C51322 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DA4JAVR3MD;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bix-digital.TalkTranscriberTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TalkTranscriber.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TalkTranscriber";
+			};
+			name = Release;
+		};
+		50C3847E2C10542400C51322 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DA4JAVR3MD;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bix-digital.TalkTranscriberUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = TalkTranscriber;
+			};
+			name = Debug;
+		};
+		50C3847F2C10542400C51322 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DA4JAVR3MD;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bix-digital.TalkTranscriberUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = TalkTranscriber;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		50C3844E2C10541B00C51322 /* Build configuration list for PBXProject "TalkTranscriber" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				50C384752C10542400C51322 /* Debug */,
+				50C384762C10542400C51322 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		50C384772C10542400C51322 /* Build configuration list for PBXNativeTarget "TalkTranscriber" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				50C384782C10542400C51322 /* Debug */,
+				50C384792C10542400C51322 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		50C3847A2C10542400C51322 /* Build configuration list for PBXNativeTarget "TalkTranscriberTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				50C3847B2C10542400C51322 /* Debug */,
+				50C3847C2C10542400C51322 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		50C3847D2C10542400C51322 /* Build configuration list for PBXNativeTarget "TalkTranscriberUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				50C3847E2C10542400C51322 /* Debug */,
+				50C3847F2C10542400C51322 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		50C384802C1054CE00C51322 /* XCRemoteSwiftPackageReference "WhisperKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/argmaxinc/WhisperKit";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		50C384812C1054CE00C51322 /* WhisperKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 50C384802C1054CE00C51322 /* XCRemoteSwiftPackageReference "WhisperKit" */;
+			productName = WhisperKit;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 50C3844B2C10541B00C51322 /* Project object */;
+}
