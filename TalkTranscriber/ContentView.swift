@@ -11,7 +11,7 @@ import CoreML
 
 struct ContentView: View {
     @State var whisper: WhisperKit? = nil
-    private var selectedModel = WhisperKit.recommendedModels().default
+    private var selectedModel = "base.en"
     @State private var isRecording: Bool = false
     @State private var isTranscribing: Bool = false
     @State private var transcriptionTask: Task<Void, Never>? = nil
@@ -19,7 +19,7 @@ struct ContentView: View {
     @State private var timer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
 
     private var questions = ["What is the current year?", "What is the current month?", "What day is it?", "Who is the current president of the US?"]
-    private var words = ["car", "clock", "pen"]
+    private var words = ["car", "clock", "pencil"]
     
     @State private var bufferEnergy: [Float] = []
     @State private var bufferSeconds: Double = 0
@@ -65,10 +65,11 @@ struct ContentView: View {
         VStack {
 
             if wordIndex < 4 {
-                Text((modelState == .loaded && wordIndex < 4) ? words[wordIndex] : "")
+                Text((modelState == .loaded && wordIndex < 4) ? questions[wordIndex] : "")
+                    .font(.largeTitle)
                     .onReceive(timer) { time in
                         if(modelState == .loaded) {
-                            if wordIndex == 2 {
+                            if wordIndex == 6 {
                                 print("Stopping")
                                 timer.upstream.connect().cancel()
                                 stopRecording(true)
@@ -87,7 +88,7 @@ struct ContentView: View {
                     .padding()
                     .onReceive(timer) { time in
                         if(modelState == .loaded) {
-                            if wordIndex == 2 {
+                            if wordIndex == 6 {
                                 print("Stopping")
                                 timer.upstream.connect().cancel()
                                 stopRecording(true)
