@@ -16,7 +16,7 @@ struct ContentView: View {
     @State private var isTranscribing: Bool = false
     @State private var transcriptionTask: Task<Void, Never>? = nil
     @State private var wordIndex = 0
-    var timer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
+    @State private var timer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
 
     
     private var words = ["bicycle", "car", "chair.lounge"]
@@ -63,18 +63,11 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-//            Button {
-//                resetState()
-//                loadModel(selectedModel)
-//                modelState = .loading
-//            } label: {
-//                Text("Load Model")
-//                    .frame(maxWidth: .infinity)
-//                    .frame(height: 40)
-//            }
-//            .buttonStyle(.borderedProminent)
             Image(systemName: (modelState == .loaded && wordIndex < 3) ? words[wordIndex] : "")
-                .font(.largeTitle)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 200, height: 200)
+                .padding()
                 .onReceive(timer) { time in
                     if(modelState == .loaded) {
                         if wordIndex == 2 {
@@ -88,10 +81,12 @@ struct ContentView: View {
                         wordIndex += 1
                     }
                 }
-            Spacer()
-            Image(systemName: "globe")
-                .font(.largeTitle)
-                .foregroundStyle(modelState == .loaded ? .green : (modelState == .unloaded ? .red : .yellow))
+
+//            Image(systemName: "globe")
+//                .resizable()
+//                .scaledToFit()
+//                .frame(width: 50, height: 50)
+//                .foregroundStyle(modelState == .loaded ? .green : (modelState == .unloaded ? .red : .yellow))
             Spacer()
             ForEach(Array(unconfirmedSegments.enumerated()), id: \.element) { _, segment in
                 let timestampText = ""
@@ -103,16 +98,20 @@ struct ContentView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
 
-            Button{
-//                isRecording = !isRecording
-                toggleRecording(shouldLoop: true)
-            }
-        label: {
-            Label(isRecording ? "Stop Recording": "Start Recording", systemImage: isRecording ? "stop.circle": "record.circle")
-                .foregroundColor(.red)
-        }.contentTransition(.symbolEffect(.replace))
+            Text((modelState != .loaded) ? "Model Loading" : (isRecording ? "Transcribing": "Stopped Transcribing"))
+                .foregroundStyle(isRecording ? .green : .red)
                 .font(.largeTitle)
-                .disabled(modelState != .loaded)
+            
+            Button(action: {
+                resetState()
+                toggleRecording(shouldLoop: true)
+            }, label: {
+                Text("Reset")
+                    .font(.largeTitle)
+                Text(Image(systemName: "arrow.circlepath"))
+                    .font(.largeTitle)
+            })
+
         }
         .padding()
         .onAppear {
@@ -221,6 +220,7 @@ struct ContentView: View {
         isTranscribing = false
         whisper?.audioProcessor.stopRecording()
         currentText = ""
+        wordIndex = 0
 
         pipelineStart = Double.greatestFiniteMagnitude
         firstTokenTime = Double.greatestFiniteMagnitude
@@ -238,7 +238,8 @@ struct ContentView: View {
         confirmedSegments = []
         confirmedText = ""
         unconfirmedSegments = []
-
+        self.timer.upstream.connect().cancel()
+        self.timer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
     }
     
     func toggleRecording(shouldLoop: Bool) {
