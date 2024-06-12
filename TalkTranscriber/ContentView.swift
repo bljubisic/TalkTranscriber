@@ -18,8 +18,8 @@ struct ContentView: View {
     @State private var wordIndex = 0
     @State private var timer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
 
-    
-    private var words = ["bicycle", "car", "chair.lounge"]
+    private var questions = ["What is the current year?", "What is the current month?", "What day is it?", "Who is the current president of the US?"]
+    private var words = ["car", "clock", "pen"]
     
     @State private var bufferEnergy: [Float] = []
     @State private var bufferSeconds: Double = 0
@@ -63,25 +63,42 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            Image(systemName: (modelState == .loaded && wordIndex < 3) ? words[wordIndex] : "")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 200, height: 200)
-                .padding()
-                .onReceive(timer) { time in
-                    if(modelState == .loaded) {
-                        if wordIndex == 2 {
-                            print("Stopping")
-                            timer.upstream.connect().cancel()
-                            stopRecording(true)
-                        } else {
-                            print("The time is now \(time)")
-                        }
-                        
-                        wordIndex += 1
-                    }
-                }
 
+            if wordIndex < 4 {
+                Text((modelState == .loaded && wordIndex < 4) ? words[wordIndex] : "")
+                    .onReceive(timer) { time in
+                        if(modelState == .loaded) {
+                            if wordIndex == 2 {
+                                print("Stopping")
+                                timer.upstream.connect().cancel()
+                                stopRecording(true)
+                            } else {
+                                print("The time is now \(time)")
+                            }
+                            
+                            wordIndex += 1
+                        }
+                    }
+            } else {
+                Image(systemName: (modelState == .loaded && wordIndex < 7) ? words[wordIndex - 4] : "")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 200, height: 200)
+                    .padding()
+                    .onReceive(timer) { time in
+                        if(modelState == .loaded) {
+                            if wordIndex == 2 {
+                                print("Stopping")
+                                timer.upstream.connect().cancel()
+                                stopRecording(true)
+                            } else {
+                                print("The time is now \(time)")
+                            }
+                            
+                            wordIndex += 1
+                        }
+                    }
+            }
 //            Image(systemName: "globe")
 //                .resizable()
 //                .scaledToFit()
