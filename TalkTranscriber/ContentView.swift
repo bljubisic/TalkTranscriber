@@ -59,7 +59,7 @@ struct ContentView: View {
     @AppStorage("enablePromptPrefill") private var enablePromptPrefill: Bool = true
     @AppStorage("enableCachePrefill") private var enableCachePrefill: Bool = true
     @AppStorage("enableSpecialCharacters") private var enableSpecialCharacters: Bool = false
-    @AppStorage("chunkingStrategy") private var chunkingStrategy: ChunkingStrategy = .none
+    @AppStorage("chunkingStrategy") private var chunkingStrategy: ChunkingStrategy = .vad
     
     var body: some View {
         VStack {
@@ -159,7 +159,7 @@ struct ContentView: View {
         Task {
             whisper = try await WhisperKit(
                 computeOptions: getComputeOptions(),
-                verbose: true,
+                verbose: false,
                 logLevel: .none,
                 prewarm: false,
                 load: false,
