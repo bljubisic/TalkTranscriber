@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5076E0402C21BE7A005AB87F /* TranscriptionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5076E03F2C21BE7A005AB87F /* TranscriptionModel.swift */; };
 		50C384572C10541B00C51322 /* TalkTranscriberApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C384562C10541B00C51322 /* TalkTranscriberApp.swift */; };
 		50C384592C10541B00C51322 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C384582C10541B00C51322 /* ContentView.swift */; };
 		50C3845B2C10542300C51322 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 50C3845A2C10542300C51322 /* Assets.xcassets */; };
@@ -35,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5076E03F2C21BE7A005AB87F /* TranscriptionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptionModel.swift; sourceTree = "<group>"; };
 		50C384532C10541B00C51322 /* TalkTranscriber.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TalkTranscriber.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		50C384562C10541B00C51322 /* TalkTranscriberApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkTranscriberApp.swift; sourceTree = "<group>"; };
 		50C384582C10541B00C51322 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -73,6 +75,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5076E03E2C21BE4C005AB87F /* model */ = {
+			isa = PBXGroup;
+			children = (
+				5076E03F2C21BE7A005AB87F /* TranscriptionModel.swift */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
 		50C3844A2C10541B00C51322 = {
 			isa = PBXGroup;
 			children = (
@@ -96,6 +106,7 @@
 		50C384552C10541B00C51322 /* TalkTranscriber */ = {
 			isa = PBXGroup;
 			children = (
+				5076E03E2C21BE4C005AB87F /* model */,
 				50C384562C10541B00C51322 /* TalkTranscriberApp.swift */,
 				50C384582C10541B00C51322 /* ContentView.swift */,
 				50C3845A2C10542300C51322 /* Assets.xcassets */,
@@ -265,6 +276,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5076E0402C21BE7A005AB87F /* TranscriptionModel.swift in Sources */,
 				50C384592C10541B00C51322 /* ContentView.swift in Sources */,
 				50C384572C10541B00C51322 /* TalkTranscriberApp.swift in Sources */,
 			);
