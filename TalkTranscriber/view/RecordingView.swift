@@ -10,9 +10,10 @@ import WhisperKit
 import AVFoundation
 import CoreML
 import Combine
+import Speech
 
 struct recordingView: View {
-    
+    @EnvironmentObject var readyForRecording: ReadyForRecording
     @State var whisper: WhisperKit? = nil
     var selectedModel = "base.en"
     @State private var isRecording: Bool = false
@@ -23,10 +24,10 @@ struct recordingView: View {
     
     @State private var transcribeFileTask: Task<Void, Never>? = nil
     
-    @State var audioFile: URL
+    @State var audioFile: URL = URL(fileURLWithPath: "")
     
-    var questions = ["What is the current year?", "What is the current month?", "What day is it?", "Who is the current president of the US?"]
-    var words = ["car", "clock", "pencil"]
+    var reference = ["2024", "june", "wednesday", "joe biden", "car", "clock", "pen"]
+//    var words = ["car", "clock", "pencil"]
     @State var audioRecorder: AVAudioRecorder?
     
     @State private var bufferEnergy: [Float] = []
@@ -56,7 +57,7 @@ struct recordingView: View {
     
     @State private var confirmedText: String = ""
     
-    @State private var fileFolderURL: URL = URL(fileURLWithPath: "")
+    @State var fileFolderURL: URL = URL(fileURLWithPath: "")
 
     @State var modelStorage: String = "huggingface/models/argmaxinc/whisperkit-coreml"
     
@@ -69,33 +70,14 @@ struct recordingView: View {
     @AppStorage("enablePromptPrefill") private var enablePromptPrefill: Bool = true
     @AppStorage("enableCachePrefill") private var enableCachePrefill: Bool = true
     @AppStorage("enableSpecialCharacters") private var enableSpecialCharacters: Bool = false
-    @AppStorage("chunkingStrategy") private var chunkingStrategy: ChunkingStrategy = .none
+    @AppStorage("chunkingStrategy") private var chunkingStrategy: ChunkingStrategy = .vad
     
     var body: some View {
         VStack {
             if let timer = timer {
-                if wordIndex < 4 {
-                    Text((modelState == .loaded && wordIndex < 4) ? questions[wordIndex] : "")
+                if wordIndex < 7 {
+                    Text(reference[wordIndex])
                         .font(.largeTitle)
-                        .onReceive(timer) { time in
-                            if(modelState == .loaded) {
-                                if wordIndex == 6 {
-                                    print("Stopping")
-                                    self.timer?.upstream.connect().cancel()
-                                    stopRecording(true)
-                                } else {
-                                    print("The time is now \(time)")
-                                }
-                                
-                                wordIndex += 1
-                            }
-                        }
-                } else {
-                    Image(systemName: (modelState == .loaded && wordIndex < 7) ? words[wordIndex - 4] : "")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 200, height: 200)
-                        .padding()
                         .onReceive(timer) { time in
                             if(modelState == .loaded) {
                                 if wordIndex == 6 {
@@ -134,7 +116,7 @@ struct recordingView: View {
                     .font(.largeTitle)
                     .tint(.red)
             })
-            .disabled(modelState == .loaded ? false : true)
+            .disabled((modelState == .loaded || !isTranscribing) ? false : true)
 
         }
         .padding()
@@ -159,7 +141,7 @@ struct recordingView: View {
                     try setupAudioSession()
                     try setupRecorder(folder: folder)
                 } catch {
-                    
+                    print(error)
                 }
             } else {
                 // Handle permission denied
@@ -170,9 +152,9 @@ struct recordingView: View {
     func setupRecorder(folder: URL) throws {
         let recordingSettings = [AVFormatIDKey: kAudioFormatMPEG4AAC, AVSampleRateKey: 12000, AVNumberOfChannelsKey: 1, AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue] as [String : Any]
 //        let documentPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let audioFilename = folder.appendingPathComponent("recording.m4a")
+        audioFile = folder.appendingPathComponent("recording.m4a")
         
-        audioRecorder = try AVAudioRecorder(url: audioFilename, settings: recordingSettings)
+        audioRecorder = try AVAudioRecorder(url: audioFile, settings: recordingSettings)
         audioRecorder?.prepareToRecord()
     }
     
@@ -194,8 +176,10 @@ struct recordingView: View {
                 attributes: nil
             )
         } catch CocoaError.fileWriteFileExists {
+            print("Folder Exists")
             // Folder already existed
         } catch {
+            print(error)
             throw error
         }
         return nestedFolderURL
@@ -383,9 +367,65 @@ struct recordingView: View {
     
     private func stopRecording(_ loop: Bool) {
         isRecording = false
+        isTranscribing = true
         audioRecorder?.stop()
         transcribeFile(path: audioFile.path())
+        recognizeFile(url: audioFile)
 //        resetState()
+    }
+    
+    func recognizeFile(url: URL) {
+        let manager = FileManager.default
+        // Create a speech recognizer associated with the user's default language.
+        guard let myRecognizer = SFSpeechRecognizer() else {
+            // The system doesn't support the user's default language.
+            return
+        }
+        
+        guard myRecognizer.isAvailable else {
+            // The recognizer isn't available.
+            return
+        }
+        
+        // Create and execute a speech recognition request for the audio file at the URL.
+        let request = SFSpeechURLRecognitionRequest(url: url)
+        myRecognizer.recognitionTask(with: request) { (result, error) in
+            guard let result else {
+                // Recognition failed, so check the error for details and handle it.
+                return
+            }
+            
+            // Print the speech transcription with the highest confidence that the
+            // system recognized.
+            if result.isFinal {
+                var arr = result.bestTranscription.formattedString.lowercased().components(separatedBy: " ")
+                var referenceApple = reference.joined(separator: " ").components(separatedBy: " ")
+                let wer = calculateWER(arr, referenceApple)
+                let transcription = TranscriptionWER(transcription: arr, reference: reference, wordErrorRate: wer, timeForTranscription: 0.0)
+                do {
+                    let encodedData = try JSONEncoder().encode(transcription)
+                    let jsonString = String(data: encodedData,
+                                            encoding: .utf8)
+                    let pathWithFilename = fileFolderURL.appendingPathComponent("apple.json")
+                    do {
+                        try jsonString?.write(to: pathWithFilename,
+                                             atomically: true,
+                                             encoding: .utf8)
+                    } catch {
+                        print(error)
+                    }
+                    isTranscribing = false
+                    self.readyForRecording.notReadyForRecording()
+                    do {
+                        try manager.removeItem(atPath: audioFile.path())
+                    } catch {
+                        print(error)
+                    }
+                } catch {
+                    print(error)
+                }
+            }
+        }
     }
     
     private func transcribeFile(path: String) {
@@ -420,7 +460,53 @@ struct recordingView: View {
             self.currentLag = transcription?.timings.decodingLoop ?? 0
 
             self.confirmedSegments = segments
+            var confirmedText = self.confirmedSegments.map{segment in segment.text}.reduce("", {combined, text in combined + "." + text})
+            var arr = confirmedText.components(separatedBy: ".")
+            arr = arr.map{element in element.trimmingCharacters(in: .whitespacesAndNewlines)}.map{element in element.lowercased()}.filter{item in item != ""}
+            let wer = calculateWER(arr, reference)
+            let transcription = TranscriptionWER(transcription: arr, reference: reference, wordErrorRate: wer, timeForTranscription: 0.0)
+            do {
+                let encodedData = try JSONEncoder().encode(transcription)
+                let jsonString = String(data: encodedData,
+                                        encoding: .utf8)
+                let pathWithFilename = fileFolderURL.appendingPathComponent("whisper.json")
+                do {
+                    try jsonString?.write(to: pathWithFilename,
+                                         atomically: true,
+                                         encoding: .utf8)
+                } catch {
+                    print(error)
+                }
+            } catch {
+                print(error)
+            }
+
         }
+    }
+    
+    private func calculateWER(_ arr: [String], _ reference: [String]) -> Double{
+        var combined: [String] = [""]
+        if arr.count > reference.count {
+            combined = arr.map{_ in ""}
+            var index = 0
+            for el in arr {
+                if reference.contains(el) {
+                    combined[index] = el
+                }
+                index += 1
+            }
+        } else if reference.count >= arr.count {
+            combined = reference.map{_ in ""}
+            var index = 0
+            for el in reference {
+                if arr.contains(el) {
+                    combined[index] = el
+                }
+                index += 1
+            }
+        }
+        combined = combined.filter{element in element == ""}
+        return Double(combined.count) / Double(reference.count)
     }
     
     private func transcribeAudioSamples(_ samples: [Float]) async throws -> TranscriptionResult? {
@@ -500,5 +586,5 @@ struct recordingView: View {
 }
 
 #Preview {
-    recordingView(audioFile: URL(fileURLWithPath: "something"))
+    recordingView().environmentObject(ReadyForRecording(isReadyForRecording: true))
 }

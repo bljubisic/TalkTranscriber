@@ -15,6 +15,10 @@ class ReadyForRecording: ObservableObject {
         self.isReadyForRecording = isReadyForRecording
     }
     
+    func notReadyForRecording() {
+        isReadyForRecording = false
+    }
+    
     func readyForRecording() {
         isReadyForRecording = true
     }

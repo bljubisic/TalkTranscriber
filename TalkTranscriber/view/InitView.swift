@@ -25,5 +25,5 @@ struct initView: View {
 }
 
 #Preview {
-    initView()
+    initView().environmentObject(ReadyForRecording(isReadyForRecording: false))
 }

@@ -9,20 +9,20 @@ import SwiftUI
 
 struct ContentView: View {
 
-    @EnvironmentObject var readyForRecording: ReadyForRecording
+    @StateObject var readyForRecording: ReadyForRecording = ReadyForRecording(isReadyForRecording: false)
 
 
     
     var body: some View {
         if readyForRecording.isReadyForRecording {
-            recordingView(audioFile: URL(fileURLWithPath: "something"))
+            recordingView().environmentObject(readyForRecording)
         } else {
-            initView()
+            initView().environmentObject(readyForRecording)
         }
     }
     
 }
 
 #Preview {
-    ContentView().environmentObject(ReadyForRecording(isReadyForRecording: false))
+    ContentView(readyForRecording: ReadyForRecording(isReadyForRecording: false))
 }

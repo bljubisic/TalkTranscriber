@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct TranscriptionWER {
-    let transcription: String
-    let reference: String
+struct TranscriptionWER: Codable {
+    let transcription: [String]
+    let reference: [String]
     let wordErrorRate: Double
     let timeForTranscription: Double
 }
