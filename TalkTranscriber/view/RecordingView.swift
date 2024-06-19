@@ -9,6 +9,7 @@ import SwiftUI
 import WhisperKit
 import AVFoundation
 import CoreML
+import Combine
 
 struct recordingView: View {
     
@@ -18,7 +19,9 @@ struct recordingView: View {
     @State private var isTranscribing: Bool = false
     @State private var transcriptionTask: Task<Void, Never>? = nil
     @State private var wordIndex = 0
-    @State private var timer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
+    @State private var timer: Publishers.Autoconnect<Timer.TimerPublisher>? = nil
+    
+    @State private var transcribeFileTask: Task<Void, Never>? = nil
     
     @State var audioFile: URL
     
@@ -52,6 +55,8 @@ struct recordingView: View {
     @State private var disabledModels: [String] = WhisperKit.recommendedModels().disabled
     
     @State private var confirmedText: String = ""
+    
+    @State private var fileFolderURL: URL = URL(fileURLWithPath: "")
 
     @State var modelStorage: String = "huggingface/models/argmaxinc/whisperkit-coreml"
     
@@ -68,42 +73,43 @@ struct recordingView: View {
     
     var body: some View {
         VStack {
-
-            if wordIndex < 4 {
-                Text((modelState == .loaded && wordIndex < 4) ? questions[wordIndex] : "")
-                    .font(.largeTitle)
-                    .onReceive(timer) { time in
-                        if(modelState == .loaded) {
-                            if wordIndex == 6 {
-                                print("Stopping")
-                                timer.upstream.connect().cancel()
-                                stopRecording(true)
-                            } else {
-                                print("The time is now \(time)")
+            if let timer = timer {
+                if wordIndex < 4 {
+                    Text((modelState == .loaded && wordIndex < 4) ? questions[wordIndex] : "")
+                        .font(.largeTitle)
+                        .onReceive(timer) { time in
+                            if(modelState == .loaded) {
+                                if wordIndex == 6 {
+                                    print("Stopping")
+                                    self.timer?.upstream.connect().cancel()
+                                    stopRecording(true)
+                                } else {
+                                    print("The time is now \(time)")
+                                }
+                                
+                                wordIndex += 1
                             }
-
-                            wordIndex += 1
                         }
-                    }
-            } else {
-                Image(systemName: (modelState == .loaded && wordIndex < 7) ? words[wordIndex - 4] : "")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 200, height: 200)
-                    .padding()
-                    .onReceive(timer) { time in
-                        if(modelState == .loaded) {
-                            if wordIndex == 6 {
-                                print("Stopping")
-                                timer.upstream.connect().cancel()
-                                stopRecording(true)
-                            } else {
-                                print("The time is now \(time)")
+                } else {
+                    Image(systemName: (modelState == .loaded && wordIndex < 7) ? words[wordIndex - 4] : "")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 200, height: 200)
+                        .padding()
+                        .onReceive(timer) { time in
+                            if(modelState == .loaded) {
+                                if wordIndex == 6 {
+                                    print("Stopping")
+                                    self.timer?.upstream.connect().cancel()
+                                    stopRecording(true)
+                                } else {
+                                    print("The time is now \(time)")
+                                }
+                                
+                                wordIndex += 1
                             }
-
-                            wordIndex += 1
                         }
-                    }
+                }
             }
             Spacer()
             ForEach(Array(unconfirmedSegments.enumerated()), id: \.element) { _, segment in
@@ -116,46 +122,42 @@ struct recordingView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
 
-            Text((modelState != .loaded) ? "Model Loading" : (isRecording ? "Transcribing": "Stopped Transcribing"))
+            Text((modelState != .loaded) ? "Model Loading" : (isRecording ? "Recording": ""))
                 .foregroundStyle(isRecording ? .green : .red)
                 .font(.largeTitle)
 
             Button(action: {
-                resetState()
-                toggleRecording(shouldLoop: true)
+//                resetState()
+                toggleRecording(shouldLoop: false)
             }, label: {
-                Text("Reset")
+                Text(isRecording ? Image(systemName: "stop.circle") : Image(systemName: "record.circle"))
                     .font(.largeTitle)
-                Text(Image(systemName: "arrow.circlepath"))
-                    .font(.largeTitle)
+                    .tint(.red)
             })
+            .disabled(modelState == .loaded ? false : true)
 
         }
         .padding()
         .onAppear {
             do {
-                let fileFolderURL = try createNewFolder()
-                prepareAudioRecording(fileFolderURL)
+                fileFolderURL = try createNewFolder()
+                requestRecordPermission(folder: fileFolderURL)
             } catch {
                 print(error)
             }
             fetchModels()
-            resetState()
+//            resetState()
             loadModel(selectedModel)
             modelState = .loading
         }
     }
     
-    func prepareAudioRecording(_ folder: URL) {
-        requestRecordPermission()
-    }
-    
-    func requestRecordPermission() {
+    func requestRecordPermission(folder: URL) {
         AVAudioApplication.requestRecordPermission { granted in
             if granted {
                 do {
                     try setupAudioSession()
-                    try setupRecorder()
+                    try setupRecorder(folder: folder)
                 } catch {
                     
                 }
@@ -165,10 +167,10 @@ struct recordingView: View {
         }
     }
     
-    func setupRecorder() throws {
+    func setupRecorder(folder: URL) throws {
         let recordingSettings = [AVFormatIDKey: kAudioFormatMPEG4AAC, AVSampleRateKey: 12000, AVNumberOfChannelsKey: 1, AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue] as [String : Any]
-        let documentPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let audioFilename = documentPath.appendingPathComponent("recording.m4a")
+//        let documentPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let audioFilename = folder.appendingPathComponent("recording.m4a")
         
         audioRecorder = try AVAudioRecorder(url: audioFilename, settings: recordingSettings)
         audioRecorder?.prepareToRecord()
@@ -203,7 +205,7 @@ struct recordingView: View {
         return ModelComputeOptions(audioEncoderCompute: encoderComputeUnits, textDecoderCompute: decoderComputeUnits)
     }
     
-    func loadModel(_ model: String, redownload: Bool = false) {
+    private func loadModel(_ model: String, redownload: Bool = false) {
         print("Selected Model: \(UserDefaults.standard.string(forKey: "selectedModel") ?? "nil")")
         print("""
             Computing Options:
@@ -285,13 +287,13 @@ struct recordingView: View {
 
                     availableLanguages = Constants.languages.map { $0.key }.sorted()
                     modelState = whisperKit.modelState
-                    toggleRecording(shouldLoop: true)
+//                    toggleRecording(shouldLoop: true)
                 }
             }
         }
     }
     
-    func resetState() {
+    private func resetState() {
         isRecording = false
         isTranscribing = false
         whisper?.audioProcessor.stopRecording()
@@ -314,21 +316,22 @@ struct recordingView: View {
         confirmedSegments = []
         confirmedText = ""
         unconfirmedSegments = []
-        self.timer.upstream.connect().cancel()
-        self.timer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
+        self.timer?.upstream.connect().cancel()
     }
     
-    func toggleRecording(shouldLoop: Bool) {
+    private func toggleRecording(shouldLoop: Bool) {
         isRecording.toggle()
 
         if isRecording {
+            self.timer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
             startRecording(shouldLoop)
         } else {
             stopRecording(shouldLoop)
+            resetState()
         }
     }
     
-    func fetchModels() {
+    private func fetchModels() {
         availableModels = [selectedModel]
 
         // First check what's already downloaded
@@ -374,120 +377,34 @@ struct recordingView: View {
         }
     }
     
-    func startRecording(_ shouldLoop: Bool) {
-        if let audioProcessor = whisper?.audioProcessor {
-            Task(priority: .userInitiated) {
-                guard await AudioProcessor.requestRecordPermission() else {
-                    print("Microphone access was not granted.")
-                    return
-                }
-                
-                var deviceId: DeviceID?
-                try? audioProcessor.startRecordingLive(inputDeviceID: deviceId) { _ in
-                    DispatchQueue.main.async {
-                        bufferEnergy = whisper?.audioProcessor.relativeEnergy ?? []
-                        bufferSeconds = Double(whisper?.audioProcessor.audioSamples.count ?? 0) / Double(WhisperKit.sampleRate)
-                    }
-                }
-                // Delay the timer start by 1 second
-                isRecording = true
-                isTranscribing = true
-                if shouldLoop {
-                    realtimeLoop()
-                }
-            }
-        }
+    private func startRecording(_ shouldLoop: Bool) {
+        audioRecorder?.record()
     }
     
-    func stopRecording(_ loop: Bool) {
+    private func stopRecording(_ loop: Bool) {
         isRecording = false
-        stopRealtimeTranscription()
-        if let audioProcessor = whisper?.audioProcessor {
-            audioProcessor.stopRecording()
-        }
-
-        // If not looping, transcribe the full buffer
-
-            Task {
-                do {
-                    try await transcribeCurrentBuffer()
-                } catch {
-                    print("Error: \(error.localizedDescription)")
-                }
-            }
+        audioRecorder?.stop()
+        transcribeFile(path: audioFile.path())
+//        resetState()
+    }
+    
+    private func transcribeFile(path: String) {
         resetState()
-    }
-    
-    func stopRealtimeTranscription() {
-        isTranscribing = false
-        transcriptionTask?.cancel()
-    }
-    
-    func realtimeLoop() {
-        transcriptionTask = Task {
-            while isRecording && isTranscribing {
-                do {
-                    try await transcribeCurrentBuffer()
-                } catch {
-                    print("Error: \(error.localizedDescription)")
-                    break
-                }
+        whisper?.audioProcessor = AudioProcessor()
+        self.transcribeFileTask = Task {
+            do {
+                try await transcribeCurrentFile(path: path)
+            } catch {
+                print("File selection error: \(error.localizedDescription)")
             }
         }
     }
     
-    func transcribeCurrentBuffer() async throws{
-        guard let whisperKit = whisper else {return}
-        
-        let currentBuffer = whisperKit.audioProcessor.audioSamples
-        
-        let nextBufferSize = currentBuffer.count - lastBufferSize
-        let nextBufferSeconds = Float(nextBufferSize) / Float(WhisperKit.sampleRate)
+    private func transcribeCurrentFile(path: String) async throws {
+        let audioFileBuffer = try AudioProcessor.loadAudio(fromPath: path)
+        let audioFileSamples = AudioProcessor.convertBufferToArray(buffer: audioFileBuffer)
+        let transcription = try await transcribeAudioSamples(audioFileSamples)
 
-        // Only run the transcribe if the next buffer has at least 1 second of audio
-        guard nextBufferSeconds > 1 else {
-            await MainActor.run {
-                if currentText == "" {
-                    currentText = "Waiting for speech..."
-                }
-            }
-            try await Task.sleep(nanoseconds: 100_000_000) // sleep for 100ms for next buffer
-            return
-        }
-        
-        let voiceDetected = AudioProcessor.isVoiceDetected(
-            in: whisperKit.audioProcessor.relativeEnergy,
-            nextBufferInSeconds: nextBufferSeconds,
-            silenceThreshold: Float(silenceThreshold)
-        )
-        // Only run the transcribe if the next buffer has voice
-        guard voiceDetected else {
-            await MainActor.run {
-                if currentText == "" {
-                    currentText = "Waiting for speech..."
-                }
-            }
-
-            // TODO: Implement silence buffer purging
-//                if nextBufferSeconds > 30 {
-//                    // This is a completely silent segment of 30s, so we can purge the audio and confirm anything pending
-//                    lastConfirmedSegmentEndSeconds = 0
-//                    whisperKit.audioProcessor.purgeAudioSamples(keepingLast: 2 * WhisperKit.sampleRate) // keep last 2s to include VAD overlap
-//                    currentBuffer = whisperKit.audioProcessor.audioSamples
-//                    lastBufferSize = 0
-//                    confirmedSegments.append(contentsOf: unconfirmedSegments)
-//                    unconfirmedSegments = []
-//                }
-
-            // Sleep for 100ms and check the next buffer
-            try await Task.sleep(nanoseconds: 100_000_000)
-            return
-        }
-        
-        lastBufferSize = currentBuffer.count
-        // Run realtime transcribe using timestamp tokens directly
-        let transcription = try await transcribeAudioSamples(Array(currentBuffer))
-        // We need to run this next part on the main thread
         await MainActor.run {
             currentText = ""
             guard let segments = transcription?.segments else {
@@ -495,45 +412,18 @@ struct recordingView: View {
             }
 
             self.tokensPerSecond = transcription?.timings.tokensPerSecond ?? 0
+            self.effectiveRealTimeFactor = transcription?.timings.realTimeFactor ?? 0
+            self.effectiveSpeedFactor = transcription?.timings.speedFactor ?? 0
+            self.currentEncodingLoops = Int(transcription?.timings.totalEncodingRuns ?? 0)
             self.firstTokenTime = transcription?.timings.firstTokenTime ?? 0
             self.pipelineStart = transcription?.timings.pipelineStart ?? 0
             self.currentLag = transcription?.timings.decodingLoop ?? 0
-            self.currentEncodingLoops += Int(transcription?.timings.totalEncodingRuns ?? 0)
 
-            let totalAudio = Double(currentBuffer.count) / Double(WhisperKit.sampleRate)
-            self.totalInferenceTime += transcription?.timings.fullPipeline ?? 0
-            self.effectiveRealTimeFactor = Double(totalInferenceTime) / totalAudio
-            self.effectiveSpeedFactor = totalAudio / Double(totalInferenceTime)
-
-            // Logic for moving segments to confirmedSegments
-            if segments.count > requiredSegmentsForConfirmation {
-                // Calculate the number of segments to confirm
-                let numberOfSegmentsToConfirm = segments.count - requiredSegmentsForConfirmation
-
-                // Confirm the required number of segments
-                let confirmedSegmentsArray = Array(segments.prefix(numberOfSegmentsToConfirm))
-                let remainingSegments = Array(segments.suffix(requiredSegmentsForConfirmation))
-
-                // Update lastConfirmedSegmentEnd based on the last confirmed segment
-                if let lastConfirmedSegment = confirmedSegmentsArray.last, lastConfirmedSegment.end > lastConfirmedSegmentEndSeconds {
-                    lastConfirmedSegmentEndSeconds = lastConfirmedSegment.end
-
-                    // Add confirmed segments to the confirmedSegments array
-                    if !self.confirmedSegments.contains(confirmedSegmentsArray) {
-                        self.confirmedSegments.append(contentsOf: confirmedSegmentsArray)
-                    }
-                }
-
-                // Update transcriptions to reflect the remaining segments
-                self.unconfirmedSegments = remainingSegments
-            } else {
-                // Handle the case where segments are fewer or equal to required
-                self.unconfirmedSegments = segments
-            }
+            self.confirmedSegments = segments
         }
     }
     
-    func transcribeAudioSamples(_ samples: [Float]) async throws -> TranscriptionResult? {
+    private func transcribeAudioSamples(_ samples: [Float]) async throws -> TranscriptionResult? {
         guard let whisperKit = whisper else { return nil }
         
         let languageCode = "en"
