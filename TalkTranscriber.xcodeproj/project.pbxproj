@@ -15,7 +15,10 @@
 		50C384682C10542400C51322 /* TalkTranscriberTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C384672C10542400C51322 /* TalkTranscriberTests.swift */; };
 		50C384722C10542400C51322 /* TalkTranscriberUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C384712C10542400C51322 /* TalkTranscriberUITests.swift */; };
 		50C384742C10542400C51322 /* TalkTranscriberUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C384732C10542400C51322 /* TalkTranscriberUITestsLaunchTests.swift */; };
-		E40D47FE2C19872400DA113D /* WhisperKit in Frameworks */ = {isa = PBXBuildFile; productRef = E40D47FD2C19872400DA113D /* WhisperKit */; };
+		E4BC296D2C21F8AA00AF5CFD /* WhisperKit in Frameworks */ = {isa = PBXBuildFile; productRef = E4BC296C2C21F8AA00AF5CFD /* WhisperKit */; };
+		E4BC296F2C21FE7200AF5CFD /* ReadyForRecording.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BC296E2C21FE7200AF5CFD /* ReadyForRecording.swift */; };
+		E4BC29722C222ABB00AF5CFD /* RecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BC29712C222ABB00AF5CFD /* RecordingView.swift */; };
+		E4BC29742C22A5F400AF5CFD /* InitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BC29732C22A5F400AF5CFD /* InitView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +50,9 @@
 		50C3846D2C10542400C51322 /* TalkTranscriberUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TalkTranscriberUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		50C384712C10542400C51322 /* TalkTranscriberUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkTranscriberUITests.swift; sourceTree = "<group>"; };
 		50C384732C10542400C51322 /* TalkTranscriberUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalkTranscriberUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		E4BC296E2C21FE7200AF5CFD /* ReadyForRecording.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadyForRecording.swift; sourceTree = "<group>"; };
+		E4BC29712C222ABB00AF5CFD /* RecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingView.swift; sourceTree = "<group>"; };
+		E4BC29732C22A5F400AF5CFD /* InitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,7 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E40D47FE2C19872400DA113D /* WhisperKit in Frameworks */,
+				E4BC296D2C21F8AA00AF5CFD /* WhisperKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,6 +85,7 @@
 			isa = PBXGroup;
 			children = (
 				5076E03F2C21BE7A005AB87F /* TranscriptionModel.swift */,
+				E4BC296E2C21FE7200AF5CFD /* ReadyForRecording.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -106,6 +113,7 @@
 		50C384552C10541B00C51322 /* TalkTranscriber */ = {
 			isa = PBXGroup;
 			children = (
+				E4BC29702C222A1300AF5CFD /* view */,
 				5076E03E2C21BE4C005AB87F /* model */,
 				50C384562C10541B00C51322 /* TalkTranscriberApp.swift */,
 				50C384582C10541B00C51322 /* ContentView.swift */,
@@ -140,6 +148,15 @@
 			path = TalkTranscriberUITests;
 			sourceTree = "<group>";
 		};
+		E4BC29702C222A1300AF5CFD /* view */ = {
+			isa = PBXGroup;
+			children = (
+				E4BC29712C222ABB00AF5CFD /* RecordingView.swift */,
+				E4BC29732C22A5F400AF5CFD /* InitView.swift */,
+			);
+			path = view;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -157,7 +174,7 @@
 			);
 			name = TalkTranscriber;
 			packageProductDependencies = (
-				E40D47FD2C19872400DA113D /* WhisperKit */,
+				E4BC296C2C21F8AA00AF5CFD /* WhisperKit */,
 			);
 			productName = TalkTranscriber;
 			productReference = 50C384532C10541B00C51322 /* TalkTranscriber.app */;
@@ -232,7 +249,7 @@
 			);
 			mainGroup = 50C3844A2C10541B00C51322;
 			packageReferences = (
-				E40D47FC2C19872400DA113D /* XCRemoteSwiftPackageReference "whisperkit" */,
+				E4BC296B2C21F8AA00AF5CFD /* XCRemoteSwiftPackageReference "whisperkit" */,
 			);
 			productRefGroup = 50C384542C10541B00C51322 /* Products */;
 			projectDirPath = "";
@@ -277,8 +294,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				5076E0402C21BE7A005AB87F /* TranscriptionModel.swift in Sources */,
+				E4BC29722C222ABB00AF5CFD /* RecordingView.swift in Sources */,
 				50C384592C10541B00C51322 /* ContentView.swift in Sources */,
 				50C384572C10541B00C51322 /* TalkTranscriberApp.swift in Sources */,
+				E4BC29742C22A5F400AF5CFD /* InitView.swift in Sources */,
+				E4BC296F2C21FE7200AF5CFD /* ReadyForRecording.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -624,7 +644,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E40D47FC2C19872400DA113D /* XCRemoteSwiftPackageReference "whisperkit" */ = {
+		E4BC296B2C21F8AA00AF5CFD /* XCRemoteSwiftPackageReference "whisperkit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/argmaxinc/whisperkit";
 			requirement = {
@@ -635,9 +655,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E40D47FD2C19872400DA113D /* WhisperKit */ = {
+		E4BC296C2C21F8AA00AF5CFD /* WhisperKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E40D47FC2C19872400DA113D /* XCRemoteSwiftPackageReference "whisperkit" */;
+			package = E4BC296B2C21F8AA00AF5CFD /* XCRemoteSwiftPackageReference "whisperkit" */;
 			productName = WhisperKit;
 		};
 /* End XCSwiftPackageProductDependency section */
