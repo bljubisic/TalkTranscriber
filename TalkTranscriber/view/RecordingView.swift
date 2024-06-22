@@ -14,6 +14,9 @@ import Speech
 
 struct recordingView: View {
     @EnvironmentObject var readyForRecording: ReadyForRecording
+    
+    let transcriptionEnded = TranscriptionEnded(isAppleTranscriptionEnded: false, isWhisperTranscriptionEnded: false)
+    
     @State var whisper: WhisperKit? = nil
     var selectedModel = "base.en"
     @State private var isRecording: Bool = false
@@ -132,6 +135,17 @@ struct recordingView: View {
             loadModel(selectedModel)
             modelState = .loading
         }
+        .onReceive(Publishers.CombineLatest(transcriptionEnded.$isAppleTranscriptionEnded, transcriptionEnded.$isWhisperTranscriptionEnded), perform: {isAppleEnded, isWhisperEnded in
+            if isAppleEnded && isWhisperEnded {
+                do {
+                    try FileManager.default.removeItem(atPath: audioFile.path())
+                    resetState()
+                } catch {
+                    print(error)
+                }
+            }
+
+        })
     }
     
     func requestRecordPermission(folder: URL) {
@@ -300,6 +314,8 @@ struct recordingView: View {
         confirmedSegments = []
         confirmedText = ""
         unconfirmedSegments = []
+        transcriptionEnded.isAppleTranscriptionEnded = false
+        transcriptionEnded.isWhisperTranscriptionEnded = false
         self.timer?.upstream.connect().cancel()
     }
     
@@ -366,16 +382,18 @@ struct recordingView: View {
     }
     
     private func stopRecording(_ loop: Bool) {
+        let manager = FileManager.default
         isRecording = false
         isTranscribing = true
         audioRecorder?.stop()
         transcribeFile(path: audioFile.path())
         recognizeFile(url: audioFile)
+        
 //        resetState()
     }
     
     func recognizeFile(url: URL) {
-        let manager = FileManager.default
+        
         // Create a speech recognizer associated with the user's default language.
         guard let myRecognizer = SFSpeechRecognizer() else {
             // The system doesn't support the user's default language.
@@ -415,12 +433,8 @@ struct recordingView: View {
                         print(error)
                     }
                     isTranscribing = false
-                    self.readyForRecording.notReadyForRecording()
-                    do {
-                        try manager.removeItem(atPath: audioFile.path())
-                    } catch {
-                        print(error)
-                    }
+                    transcriptionEnded.isAppleTranscriptionEnded = true
+
                 } catch {
                     print(error)
                 }
@@ -460,7 +474,7 @@ struct recordingView: View {
             self.currentLag = transcription?.timings.decodingLoop ?? 0
 
             self.confirmedSegments = segments
-            var confirmedText = self.confirmedSegments.map{segment in segment.text}.reduce("", {combined, text in combined + "." + text})
+            let confirmedText = self.confirmedSegments.map{segment in segment.text}.reduce("", {combined, text in combined + "." + text})
             var arr = confirmedText.components(separatedBy: ".")
             arr = arr.map{element in element.trimmingCharacters(in: .whitespacesAndNewlines)}.map{element in element.lowercased()}.filter{item in item != ""}
             let wer = calculateWER(arr, reference)
@@ -480,7 +494,7 @@ struct recordingView: View {
             } catch {
                 print(error)
             }
-
+            transcriptionEnded.isWhisperTranscriptionEnded = true
         }
     }
     

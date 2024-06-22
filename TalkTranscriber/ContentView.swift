@@ -11,7 +11,6 @@ struct ContentView: View {
 
     @StateObject var readyForRecording: ReadyForRecording = ReadyForRecording(isReadyForRecording: false)
 
-
     
     var body: some View {
         if readyForRecording.isReadyForRecording {
