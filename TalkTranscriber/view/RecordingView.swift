@@ -316,6 +316,7 @@ struct recordingView: View {
         unconfirmedSegments = []
         transcriptionEnded.isAppleTranscriptionEnded = false
         transcriptionEnded.isWhisperTranscriptionEnded = false
+        readyForRecording.isReadyForRecording = false
         self.timer?.upstream.connect().cancel()
     }
     
@@ -327,7 +328,7 @@ struct recordingView: View {
             startRecording(shouldLoop)
         } else {
             stopRecording(shouldLoop)
-            resetState()
+//            resetState()
         }
     }
     
@@ -443,7 +444,7 @@ struct recordingView: View {
     }
     
     private func transcribeFile(path: String) {
-        resetState()
+//        resetState()
         whisper?.audioProcessor = AudioProcessor()
         self.transcribeFileTask = Task {
             do {
