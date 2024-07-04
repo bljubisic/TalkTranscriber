@@ -23,7 +23,6 @@ struct recordingView: View {
     @State private var isTranscribing: Bool = false
     @State private var transcriptionTask: Task<Void, Never>? = nil
     @State private var wordIndex = 0
-    @State private var timer: Publishers.Autoconnect<Timer.TimerPublisher>? = nil
     
     @State private var transcribeFileTask: Task<Void, Never>? = nil
     
@@ -32,6 +31,9 @@ struct recordingView: View {
     var reference = ["2024", "june", "wednesday", "joe biden", "car", "clock", "pen"]
 //    var words = ["car", "clock", "pencil"]
     @State var audioRecorder: AVAudioRecorder?
+    
+    @State var outsideTimer: Timer?
+    @State var insideTimer: Timer?
     
     @State private var bufferEnergy: [Float] = []
     @State private var bufferSeconds: Double = 0
@@ -77,24 +79,22 @@ struct recordingView: View {
     
     var body: some View {
         VStack {
-            if let timer = timer {
-                if wordIndex < 7 {
-                    Text(reference[wordIndex])
-                        .font(.largeTitle)
-                        .onReceive(timer) { time in
-                            if(modelState == .loaded) {
-                                if wordIndex == 6 {
-                                    print("Stopping")
-                                    self.timer?.upstream.connect().cancel()
-                                    stopRecording(true)
-                                } else {
-                                    print("The time is now \(time)")
-                                }
-                                
-                                wordIndex += 1
-                            }
-                        }
-                }
+            if wordIndex < 7 {
+                Text(reference[wordIndex])
+                    .font(.largeTitle)
+//                        .onReceive(timer) { time in
+//                            if(modelState == .loaded) {
+//                                if wordIndex == 6 {
+//                                    print("Stopping")
+//                                    self.timer?.upstream.connect().cancel()
+//                                    stopRecording(true)
+//                                } else {
+//                                    print("The time is now \(time)")
+//                                }
+//
+//                                wordIndex += 1
+//                            }
+//                        }
             }
             Spacer()
             ForEach(Array(unconfirmedSegments.enumerated()), id: \.element) { _, segment in
@@ -169,6 +169,7 @@ struct recordingView: View {
         audioFile = folder.appendingPathComponent("recording.m4a")
         
         audioRecorder = try AVAudioRecorder(url: audioFile, settings: recordingSettings)
+        audioRecorder?.isMeteringEnabled = true
         audioRecorder?.prepareToRecord()
     }
     
@@ -317,14 +318,12 @@ struct recordingView: View {
         transcriptionEnded.isAppleTranscriptionEnded = false
         transcriptionEnded.isWhisperTranscriptionEnded = false
         readyForRecording.isReadyForRecording = false
-        self.timer?.upstream.connect().cancel()
     }
     
     private func toggleRecording(shouldLoop: Bool) {
         isRecording.toggle()
 
         if isRecording {
-            self.timer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
             startRecording(shouldLoop)
         } else {
             stopRecording(shouldLoop)
@@ -380,6 +379,29 @@ struct recordingView: View {
     
     private func startRecording(_ shouldLoop: Bool) {
         audioRecorder?.record()
+        outsideTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+            insideTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+                print("enterered timer")
+                audioRecorder?.updateMeters()
+                
+                let currectDecibelLevel = audioRecorder?.peakPower(forChannel: 0)
+                
+                if let currectDecibelLevel = currectDecibelLevel {
+                    if currectDecibelLevel < -30 {
+                        if(modelState == .loaded) {
+                            if wordIndex == 6 {
+                                print("Stopping")
+                                stopRecording(true)
+                            } else {
+                                wordIndex += 1
+                            }
+                        }
+                    } else {
+                        print(currectDecibelLevel)
+                    }
+                }
+            }
+        }
     }
     
     private func stopRecording(_ loop: Bool) {
@@ -389,7 +411,8 @@ struct recordingView: View {
         audioRecorder?.stop()
         transcribeFile(path: audioFile.path())
         recognizeFile(url: audioFile)
-        
+        insideTimer?.invalidate()
+        outsideTimer?.invalidate()
 //        resetState()
     }
     
