@@ -28,7 +28,7 @@ struct recordingView: View {
     
     @State var audioFile: URL = URL(fileURLWithPath: "")
     
-    var reference = ["2024", "june", "wednesday", "joe biden", "car", "clock", "pen"]
+    var reference = ["2024", "june", "wednesday", "joe biden", "car", "clock", "pen", "bottle", "table", "apple", "toothbrush", "flower", "cherry", "triangle", "magnet", "umbrella"]
 //    var words = ["car", "clock", "pencil"]
     @State var audioRecorder: AVAudioRecorder?
     
@@ -79,22 +79,9 @@ struct recordingView: View {
     
     var body: some View {
         VStack {
-            if wordIndex < 7 {
+            if wordIndex < reference.count {
                 Text(reference[wordIndex])
                     .font(.largeTitle)
-//                        .onReceive(timer) { time in
-//                            if(modelState == .loaded) {
-//                                if wordIndex == 6 {
-//                                    print("Stopping")
-//                                    self.timer?.upstream.connect().cancel()
-//                                    stopRecording(true)
-//                                } else {
-//                                    print("The time is now \(time)")
-//                                }
-//
-//                                wordIndex += 1
-//                            }
-//                        }
             }
             Spacer()
             ForEach(Array(unconfirmedSegments.enumerated()), id: \.element) { _, segment in
@@ -286,7 +273,6 @@ struct recordingView: View {
 
                     availableLanguages = Constants.languages.map { $0.key }.sorted()
                     modelState = whisperKit.modelState
-//                    toggleRecording(shouldLoop: true)
                 }
             }
         }
@@ -389,7 +375,7 @@ struct recordingView: View {
                 if let currectDecibelLevel = currectDecibelLevel {
                     if currectDecibelLevel < -30 {
                         if(modelState == .loaded) {
-                            if wordIndex == 6 {
+                            if wordIndex == reference.count {
                                 print("Stopping")
                                 stopRecording(true)
                             } else {
@@ -405,7 +391,6 @@ struct recordingView: View {
     }
     
     private func stopRecording(_ loop: Bool) {
-        let manager = FileManager.default
         isRecording = false
         isTranscribing = true
         audioRecorder?.stop()
@@ -440,8 +425,8 @@ struct recordingView: View {
             // Print the speech transcription with the highest confidence that the
             // system recognized.
             if result.isFinal {
-                var arr = result.bestTranscription.formattedString.lowercased().components(separatedBy: " ")
-                var referenceApple = reference.joined(separator: " ").components(separatedBy: " ")
+                let arr = result.bestTranscription.formattedString.lowercased().components(separatedBy: " ")
+                let referenceApple = reference.joined(separator: " ").components(separatedBy: " ")
                 let wer = calculateWER(arr, referenceApple)
                 let transcription = TranscriptionWER(transcription: arr, reference: reference, wordErrorRate: wer, timeForTranscription: 0.0)
                 do {
@@ -603,7 +588,7 @@ struct recordingView: View {
             }
 
             // Check early stopping
-            let currentTokens = progress.tokens
+//            let currentTokens = progress.tokens
 
             if progress.avgLogprob! < options.logProbThreshold! {
                 Logging.debug("Early stopping due to logprob threshold")
